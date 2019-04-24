@@ -1,5 +1,5 @@
 from flask import Flask, render_template
-from flask import session, redirect,url_for
+from flask import session, redirect,url_for, flash
 from flask_bootstrap import Bootstrap
 from flask_moment import Moment
 
@@ -40,6 +40,7 @@ def simple_signup():
     if form.validate_on_submit():
         print('submit NameForm')
         session['name'] = form.name.data
+       
         # url_for references the verify_sign_up method
         return redirect(url_for('verify_signup'))
     return render_template('simplesignup.html',
@@ -49,6 +50,7 @@ def simple_signup():
 
 @app.route('/verifysignup')
 def verify_signup():
+    flash('Processing request ...')
     name = session.get('name')
 
     return render_template('verifysignup.html',
