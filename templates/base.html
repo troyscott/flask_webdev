@@ -1,5 +1,17 @@
 {% extends "bootstrap/base.html" %}
+
+{% block scripts %}
+    {{ super() }}
+    {{ moment.include_moment() }}
+{% endblock %}
+
 {% block title %}Flasky{% endblock %}
+
+{% block head %}
+{{ super() }}
+<link rel="styleysheet" href="{{url_for('static', filename='main.css')}}">
+
+{% endblock%}
 {% block navbar %}
 <div class="navbar navbar-inverse" role="navigation">
    <div class="container">
