@@ -73,15 +73,21 @@ def simple_signup():
     print('Get NameForm')
     if form.validate_on_submit():
         # Checks to see if the user exists
+        print("name:", form.name.data)
         user = User.query.filter_by(username=form.name.data).first()
         # if the user does not exist then add the user
         if user is None:
+            # Create a new user
+            user = User(username=form.name.data, role_id=3)
+            # add to database
             db.session.add(user)
+            # commit changes
             db.session.commit()
             session["known"] = False
         # if the user exists ...
         else:
             session["known"] = True
+        session["name"] = form.name.data
         # url_for references the verify_sign_up method
         return redirect(url_for('verify_signup'))
     return render_template('simplesignup.html',
