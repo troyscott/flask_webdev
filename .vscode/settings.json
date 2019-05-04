@@ -1,4 +1,11 @@
 {
-    "python.pythonPath": "C:\\Users\\tscdev\\Anaconda3\\envs\\flask\\python.exe"
+    "python.pythonPath": "C:\\Users\\tscdev\\Anaconda3\\envs\\flask\\python.exe",
+    "sqltools.connections": [
+        {
+            "database": "C:\\Apps\\data_collector\\learning-flask-dev\\data.sqlite",
+            "dialect": "SQLite",
+            "name": "flask_web_dev"
+        }
+    ]
     
 }

@@ -4,11 +4,20 @@ from flask_bootstrap import Bootstrap
 from flask_moment import Moment
 
 # Flask Forms
+'''
 from flask_wtf import FlaskForm
 from wtforms import StringField, SubmitField
 from wtforms.validators import DataRequired
+'''
 
+# Sql Alchemy
+from flask_sqlalchemy import SQLAlchemy
+
+import os
 from datetime import datetime
+
+# Import forms
+from forms import NameForm
 
  
 '''
@@ -17,15 +26,40 @@ from datetime import datetime
 
  This creates an application instance of Flask
 '''
+# Bad design current scope
 app = Flask(__name__)
 app.config['SECRET_KEY'] = 'somestring123'
+basedir = os.path.abspath(os.path.dirname(__file__))
+os_path = os.path.join(basedir, 'data.sqlite')
+db_uri = 'sqlite:///{}'.format(os_path)
+app.config['SQLALCHEMY_DATABASE_URI'] = db_uri
+app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
+
 bootstrap = Bootstrap(app)
 moment = Moment(app)
+db = SQLAlchemy(app)
 
-# Forms
-class NameForm(FlaskForm):
-    name = StringField('What is your name?', validators=[DataRequired()])
-    submit = SubmitField('Submit')
+# Models
+
+class Role(db.Model):
+    __tablename__ = 'roles'
+    id = db.Column(db.Integer, primary_key=True)
+    name = db.Column(db.String(64), unique=True)
+    users = db.relationship('User', backref='role', lazy='dynamic')
+
+    def __repr__(self):
+        return '<Role %r>' % self.name    
+
+
+class User(db.Model):
+    __tablename__ = 'users'
+    id = db.Column(db.Integer, primary_key=True)
+    username = db.Column(db.String(64), unique=True, index=True)
+    role_id = db.Column(db.Integer, db.ForeignKey('roles.id'))
+
+    def __repr_(self):
+        return '<User %r>' % self.name
+
 
 # Routes
 @app.route('/')
@@ -38,9 +72,16 @@ def simple_signup():
     form = NameForm()
     print('Get NameForm')
     if form.validate_on_submit():
-        print('submit NameForm')
-        session['name'] = form.name.data
-       
+        # Checks to see if the user exists
+        user = User.query.filter_by(username=form.name.data).first()
+        # if the user does not exist then add the user
+        if user is None:
+            db.session.add(user)
+            db.session.commit()
+            session["known"] = False
+        # if the user exists ...
+        else:
+            session["known"] = True
         # url_for references the verify_sign_up method
         return redirect(url_for('verify_signup'))
     return render_template('simplesignup.html',
@@ -52,9 +93,10 @@ def simple_signup():
 def verify_signup():
     flash('Processing request ...')
     name = session.get('name')
+    is_known = session.get('known')
 
     return render_template('verifysignup.html',
-        name=name)
+        name=name, is_known=is_known)
 
 
 @app.route('/current')
