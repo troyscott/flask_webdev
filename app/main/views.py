@@ -1,10 +1,9 @@
 from flask import render_template, session, redirect, url_for
 from . import main
-
-
-
-
-
+from .forms import NameForm
+# Reference to SQLAlchemy
+from .. import db
+from ..models import User
 
 
 # Routes
@@ -54,12 +53,12 @@ def verify_signup():
         name=name, is_known=is_known)
 
 
-@app.route('/current')
+@main.route('/current')
 def current():
     return render_template('current.html',
         current_time=datetime.utcnow())
 
-@app.route('/user/<name>')
+@main.route('/user/<name>')
 def user(name):
     return render_template('user.html',
         name=name)
