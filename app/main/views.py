@@ -37,7 +37,7 @@ def simple_signup():
             session["known"] = True
         session["name"] = form.name.data
         # url_for references the verify_sign_up method
-        return redirect(url_for('verify_signup'))
+        return redirect(url_for('main.verify_signup'))
     return render_template('simplesignup.html',
         form=form,
         name=name)
@@ -45,18 +45,12 @@ def simple_signup():
 
 @main.route('/verifysignup')
 def verify_signup():
-    flash('Processing request ...')
     name = session.get('name')
     is_known = session.get('known')
-
     return render_template('verifysignup.html',
         name=name, is_known=is_known)
 
 
-@main.route('/current')
-def current():
-    return render_template('current.html',
-        current_time=datetime.utcnow())
 
 @main.route('/user/<name>')
 def user(name):

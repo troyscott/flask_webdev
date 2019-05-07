@@ -1,8 +1,8 @@
 import os
 from app import create_app
 
-
-app = create_app(os.getevn('FLASK_CONFIG') or default)
+# set the FLASK_CONFIG, default is 'development'
+app = create_app(os.getenv('FLASK_CONFIG') or 'default')
 
 
 

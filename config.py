@@ -9,6 +9,7 @@ class Config:
 
     @staticmethod
     def init_app(app):
+        print('Intialize application ...')
         pass 
 
 class DevelopmentConfig(Config):
@@ -21,7 +22,7 @@ class TestingConfig(Config):
     SQLALCHEMY_DATABASE_URI = os.environ.get('TEST_DATABASE_URL') or \
         'sqlite://' + os.path.join(basedir, 'data-dev.sqlite')
 
-class Production(Config):
+class ProductionConfig(Config):
     SQLALCHEMY_DATABASE_URI = os.environ.get('DATABASE_URL') or \
         'sqlite:///' + os.path.join(basedir, 'data.sqlite')
 
@@ -30,6 +31,5 @@ config = {
     'development': DevelopmentConfig,
     'testing': TestingConfig,
     'production': ProductionConfig,
-
     'default': DevelopmentConfig
 }
