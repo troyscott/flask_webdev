@@ -1,7 +1,5 @@
 from . import db
 
-
-
 # Models
 
 class Role(db.Model):

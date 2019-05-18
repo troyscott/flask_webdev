@@ -1,5 +1,5 @@
 {
-    "python.pythonPath": "C:\\Users\\tscdev\\Anaconda3\\envs\\flask\\python.exe",
+    "python.pythonPath": "venv\\Scripts\\python.exe",
     "sqltools.connections": [
         {
             "database": "C:\\Apps\\data_collector\\learning-flask-dev\\data.sqlite",
